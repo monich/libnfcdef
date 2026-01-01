@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2023 Slava Monich <slava@monich.com>
+ * Copyright (C) 2018-2026 Slava Monich <slava@monich.com>
  * Copyright (C) 2018-2019 Jolla Ltd.
  *
  * You may use this file under the terms of the BSD license as follows:
@@ -156,15 +156,39 @@ void
 test_empty(
     void)
 {
+    static const guint8 empty[] = {
+        0xd0, /* NDEF record header (MB,ME,SR,TNF=0x00) */
+        0x00, /* Length of the record type */
+        0x00  /* Length of the record payload */
+    };
     GUtilData bytes;
     NdefRec* rec;
 
-    /* Special case - empty NDEF */
-    memset(&bytes, 0, sizeof(bytes));
+    /* Properly formatted empty NDEF */
+    TEST_BYTES_SET(bytes, empty);
     rec = ndef_rec_new(&bytes);
-
     g_assert(rec);
     g_assert(!rec->next);
+    g_assert_cmpint(rec->tnf, == ,NDEF_TNF_EMPTY);
+    g_assert_cmpint(rec->rtd, == ,NDEF_RTD_UNKNOWN);
+    g_assert(gutil_data_equal(&rec->raw, &bytes));
+    ndef_rec_unref(rec);
+
+    rec = ndef_rec_new_empty();
+    g_assert(rec);
+    g_assert(!rec->next);
+    g_assert_cmpint(rec->tnf, == ,NDEF_TNF_EMPTY);
+    g_assert_cmpint(rec->rtd, == ,NDEF_RTD_UNKNOWN);
+    g_assert(gutil_data_equal(&rec->raw, &bytes));
+    ndef_rec_unref(rec);
+
+    /* No data at all */
+    memset(&bytes, 0, sizeof(bytes));
+    rec = ndef_rec_new(&bytes);
+    g_assert(rec);
+    g_assert(!rec->next);
+    g_assert(!rec->raw.bytes);
+    g_assert_cmpuint(rec->raw.size, == ,0);
     g_assert(ndef_rec_initialize(rec, NDEF_RTD_UNKNOWN, NULL) == rec);
     g_assert_cmpint(rec->tnf, == ,NDEF_TNF_EMPTY);
     g_assert_cmpint(rec->rtd, == ,NDEF_RTD_UNKNOWN);

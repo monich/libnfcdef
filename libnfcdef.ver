@@ -23,3 +23,7 @@ global:
 local:
     *;
 };
+
+NDEF_1.1 {
+    ndef_rec_new_empty;
+} NDEF_1.0.0;

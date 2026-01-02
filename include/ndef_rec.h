@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2023 Slava Monich <slava@monich.com>
+ * Copyright (C) 2018-2026 Slava Monich <slava@monich.com>
  * Copyright (C) 2018-2021 Jolla Ltd.
  *
  * You may use this file under the terms of the BSD license as follows:
@@ -94,6 +94,10 @@ GType ndef_rec_get_type(void);
 NdefRec*
 ndef_rec_new(
     const GUtilData* block);
+
+NdefRec*
+ndef_rec_new_empty(
+    void); /* Since 1.1.0 */
 
 NdefRec*
 ndef_rec_new_from_tlv(

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2023 Slava Monich <slava@monich.com>
+ * Copyright (C) 2018-2026 Slava Monich <slava@monich.com>
  * Copyright (C) 2018-2022 Jolla Ltd.
  *
  * You may use this file under the terms of the BSD license as follows:
@@ -323,6 +323,24 @@ ndef_rec_new(
         }
     }
     return first;
+}
+
+NdefRec*
+ndef_rec_new_empty(
+    void) /* Since 1.1.0 */
+{
+     /* Properly formatted empty NDEF */
+    static const guint8 empty[] = {
+        0xd0, /* NDEF record header (MB,ME,SR,TNF=0x00) */
+        0x00, /* Length of the record type */
+        0x00  /* Length of the record payload */
+    };
+    NdefData ndef;
+
+    memset(&ndef, 0, sizeof(ndef));
+    ndef.rec.bytes = empty;
+    ndef.rec.size = sizeof(empty);
+    return ndef_rec_alloc(&ndef);
 }
 
 NdefRec*

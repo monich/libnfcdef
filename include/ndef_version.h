@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2023-2024 Slava Monich <slava@monich.com>
+ * Copyright (C) 2023-2026 Slava Monich <slava@monich.com>
  *
  * You may use this file under the terms of the BSD license as follows:
  *
@@ -38,6 +38,18 @@
 
 #ifndef NDEF_VERSION_H
 #define NDEF_VERSION_H
+
+/*
+ * NDEF_VERSION_X_Y_Z macros are added with each release. The fact that
+ * such macro is defined means that you're compiling against libnfcdef
+ * version X.Y.Z or greater.
+ *
+ * The versions with the same X.Y part are perfectly compatible both ways,
+ * i.e. they export the same set of symbols. Increment of the Z (release)
+*  part essentially marks an internal bug fix.
+ *
+ * The versions with different X.Y parts are backward compatible.
+ */
 
 #define NDEF_VERSION_MAJOR 1
 #define NDEF_VERSION_MINOR 0
